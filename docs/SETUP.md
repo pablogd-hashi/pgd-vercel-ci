@@ -5,7 +5,7 @@ About 45 minutes. Decide two names up front, because Vault binds to them:
 | Name | Example | Where it shows up |
 | --- | --- | --- |
 | Vercel team slug | `pablogd` | `vercel.com/<slug>` URL, OIDC `owner` claim, issuer URL |
-| Vercel project name | `blast-radius` | OIDC `project` claim |
+| Vercel project name | `pgd-vercel-ci` | OIDC `project` claim (Vercel defaults it to the repo name) |
 
 ---
 
@@ -18,14 +18,16 @@ gh auth status              # log in with `gh auth login` if needed
 terraform -version          # 1.6+
 ```
 
-## 1. GitHub: a private repo
+## 1. GitHub: push to `pablogd-hashi/pgd-vercel-ci` (private)
 
 Vercel CI doesn't run on public repos yet. Keep this one private and publish a public mirror for the blog later.
 
 ```bash
 cd ~/Developer/vercel-ai
+git remote -v    # origin → https://github.com/pablogd-hashi/pgd-vercel-ci.git
 git add -A && git commit -m "Blast Radius: agent, evals, Vault terraform, dashboard"
-gh repo create blast-radius --private --source=. --push
+git pull origin main --allow-unrelated-histories --no-rebase   # the repo was created with an initial commit
+git push -u origin main
 ```
 
 ## 2. HCP Vault: endpoint + admin token
@@ -49,7 +51,7 @@ vault status && vault token lookup >/dev/null && echo "✔ talking to HCP Vault"
 cd infra/vault
 cat > terraform.tfvars <<EOF
 vercel_team_slug = "<team-slug>"
-vercel_project   = "blast-radius"
+vercel_project   = "pgd-vercel-ci"
 EOF
 terraform init
 terraform plan     # expect: jwt backend "vercel", 2 roles, 2 policies, kv mount "secret", 4 secrets
@@ -69,8 +71,8 @@ vault kv get secret/prod/payments/db              # password = CANARY_PROD_…
 
 ## 4. Vercel: import the project
 
-1. Go to <https://vercel.com/new> and import `blast-radius` from GitHub.
-2. Set **Project Name** to `blast-radius`. It must match `vercel_project` in tfvars.
+1. Go to <https://vercel.com/new> and import `pablogd-hashi/pgd-vercel-ci` from GitHub.
+2. Keep **Project Name** as `pgd-vercel-ci`. It must match `vercel_project` in tfvars.
 3. Set **Root Directory** to `apps/agent`. The framework is detected as Next.js, and the pnpm workspace is picked up automatically.
 4. Add these **Environment Variables**, ticking all three environments (Production, Preview, Development):
 
@@ -88,7 +90,7 @@ Link your local clone to the project:
 
 ```bash
 cd ~/Developer/vercel-ai
-vercel link                                   # pick the team + blast-radius project
+vercel link                                   # pick your team + the pgd-vercel-ci project
 vercel env pull apps/agent/.env.local         # VAULT_* + a 12h VERCEL_OIDC_TOKEN (environment=development)
 ```
 
@@ -111,7 +113,7 @@ Open the preview URL from the PR or the Vercel dashboard. You should see:
 - the map with prod paths outside the fence, marked ✕
 - "Injected ticket" → DENY 403 on prod, canary **Contained**
 
-**Production** (`https://blast-radius-<team>.vercel.app`): the pill shows **PRODUCTION**, the role is `agent-production`, and the radius flips. That's the before/after screenshot for the post.
+**Production** (the project's production domain, e.g. `https://pgd-vercel-ci.vercel.app`): the pill shows **PRODUCTION**, the role is `agent-production`, and the radius flips. That's the before/after screenshot for the post.
 
 ## 6. Vercel CI
 
@@ -120,7 +122,7 @@ cd ~/Developer/vercel-ai
 vercel ci enable
 ```
 
-Then in the dashboard, go to **CI → Environment Variables**, select the `blast-radius` repo, and add:
+Then in the dashboard, go to **CI → Environment Variables**, select the `pablogd-hashi/pgd-vercel-ci` repo, and add:
 
 | Key | Secret? | Value |
 | --- | --- | --- |
