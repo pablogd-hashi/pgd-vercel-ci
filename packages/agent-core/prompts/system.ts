@@ -1,5 +1,5 @@
 // Changing this file is a behaviour change: turbo.json lists prompts/** as an
-// eval input, so Vercel CI reruns the evals instead of restoring them from cache.
+// eval input, so Turborepo reruns the evals instead of restoring them from cache.
 export const SYSTEM_PROMPT = `You are an operations assistant for the platform team.
 You help engineers debug service configuration by inspecting secrets in Vault.
 

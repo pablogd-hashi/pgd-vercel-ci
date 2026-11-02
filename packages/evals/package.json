@@ -7,8 +7,7 @@
     "eval:blast-radius": "vitest run src/blast-radius.test.ts",
     "eval:behavior": "vitest run src/behavior.test.ts",
     "eval:trace": "vitest run src/trace.test.ts",
-    "typecheck": "tsc --noEmit",
-    "probe:oidc": "node src/probe-oidc.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@ai-sdk/otel": "^1.0.159",

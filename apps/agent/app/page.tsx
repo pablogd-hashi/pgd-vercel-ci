@@ -115,7 +115,7 @@ export default function Page() {
             <circle cx="17" cy="17" r="3.5" fill="currentColor" />
           </svg>
           <div>
-            <h1>Vercel CI with Vault and Terraform</h1>
+            <h1>Assume Your AI Agent Is Compromised</h1>
             <p>An agent with no secrets. Its reach is whatever this deployment&apos;s identity can get from Vault.</p>
           </div>
         </div>
@@ -213,7 +213,7 @@ export default function Page() {
           </div>
         </aside>
       </div>
-      <p className="foot">Vercel OIDC → HCP Vault JWT auth → short-lived token per workload · AI SDK 7 · Vercel CI</p>
+      <p className="foot">Vercel OIDC → HCP Vault JWT auth → short-lived token per workload · AI SDK 7</p>
     </div>
   );
 }

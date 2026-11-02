@@ -5,7 +5,7 @@ const sans = Geist({ subsets: ['latin'], variable: '--font-sans' });
 const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata = {
-  title: 'Vercel CI with Vault and Terraform',
+  title: 'Assume Your AI Agent Is Compromised',
   description: 'An AI agent with no secrets: its reach is whatever its Vercel identity can get from Vault.',
 };
 

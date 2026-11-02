@@ -16,40 +16,30 @@
     },
     "dev": { "cache": false, "persistent": true },
     "typecheck": {
-      "tags": ["ci"],
       "dependsOn": ["^typecheck"]
     },
 
     "@pgd-vercel-ci/agent-core#typecheck": {
-      "tags": ["ci"],
       "inputs": ["src/**", "prompts/**", "tsconfig.json", "package.json"]
     },
     "@pgd-vercel-ci/vault-policy#policy:lint": {
-      "tags": ["ci"],
       "inputs": ["policies/**", "lint-policies.mjs"]
     },
 
     "eval:blast-radius": {
-      "tags": ["ci"],
       "dependsOn": ["^typecheck", "@pgd-vercel-ci/vault-policy#policy:lint"],
       "inputs": ["src/blast-radius.test.ts", "src/harness.ts", "vitest.config.ts", "$TURBO_ROOT$/infra/vault/policies/**", "$TURBO_ROOT$/infra/vault/*.tf"],
       "env": ["AGENT_MODEL"]
     },
     "eval:behavior": {
-      "tags": ["ci"],
       "dependsOn": ["^typecheck", "eval:blast-radius"],
       "inputs": ["src/behavior.test.ts", "src/harness.ts", "vitest.config.ts"],
       "env": ["AGENT_MODEL"]
     },
     "eval:trace": {
-      "tags": ["ci"],
       "dependsOn": ["^typecheck", "eval:blast-radius"],
       "inputs": ["src/trace.test.ts", "src/harness.ts", "vitest.config.ts"],
       "env": ["AGENT_MODEL", "EVAL_TOKEN_BUDGET"]
-    },
-    "probe:oidc": {
-      "tags": ["ci"],
-      "cache": false
     }
   }
 }

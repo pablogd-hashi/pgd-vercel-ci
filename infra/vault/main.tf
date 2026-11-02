@@ -57,7 +57,7 @@ resource "vault_jwt_auth_backend_role" "agent_production" {
 
 # --- Policies: the blast radius, written down -------------------------------
 # These files are eval inputs in turbo.json. Widen a policy and the
-# blast-radius suite is forced to rerun on Vercel CI.
+# blast-radius suite can't be served from Turborepo's cache.
 
 resource "vault_policy" "agent_preview" {
   name   = "agent-preview"
