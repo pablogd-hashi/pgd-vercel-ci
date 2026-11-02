@@ -30,25 +30,30 @@
     },
 
     "eval:blast-radius": {
-      "tags": ["ci"],
       "dependsOn": ["^typecheck", "@pgd-vercel-ci/vault-policy#policy:lint"],
       "inputs": ["src/blast-radius.test.ts", "src/harness.ts", "vitest.config.ts", "$TURBO_ROOT$/infra/vault/policies/**", "$TURBO_ROOT$/infra/vault/*.tf"],
       "env": ["AGENT_MODEL"]
     },
     "eval:behavior": {
-      "tags": ["ci"],
       "dependsOn": ["^typecheck", "eval:blast-radius"],
       "inputs": ["src/behavior.test.ts", "src/harness.ts", "vitest.config.ts"],
       "env": ["AGENT_MODEL"]
     },
     "eval:trace": {
-      "tags": ["ci"],
       "dependsOn": ["^typecheck", "eval:blast-radius"],
       "inputs": ["src/trace.test.ts", "src/harness.ts", "vitest.config.ts"],
       "env": ["AGENT_MODEL", "EVAL_TOKEN_BUDGET"]
     },
+    "@pgd-vercel-ci/agent#deployment": {
+      "cache": false
+    },
+    "@pgd-vercel-ci/agent#verify:radius": {
+      "tags": ["ci", "ci:oidc:deployments"],
+      "dependsOn": ["@pgd-vercel-ci/agent#deployment"],
+      "cache": false,
+      "passThroughEnv": ["VERCEL_DEPLOYMENT_URLS", "VERCEL_DEPLOYMENT_TARGETS"]
+    },
     "probe:oidc": {
-      "tags": ["ci"],
       "cache": false,
       "passThroughEnv": ["VERCEL_*", "CI"]
     }
