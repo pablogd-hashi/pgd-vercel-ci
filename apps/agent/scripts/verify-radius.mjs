@@ -9,10 +9,8 @@
 const PKG = '@pgd-vercel-ci/agent';
 
 const base = process.argv[2] ?? deploymentUrl();
-const res = await fetch(`${base}/api/radius`);
-const identity = await fetch(`${base}/api/identity`).then((r) => r.json());
-if (!res.ok) fail(`GET /api/radius returned ${res.status}: ${await res.text()}`);
-const probes = await res.json();
+const identity = await getJson('/api/identity');
+const probes = await getJson('/api/radius');
 
 const env = identity.environment === 'production' ? 'production' : 'preview';
 const tier = (target) =>
@@ -33,6 +31,19 @@ if (identity.vault?.role !== `agent-${env}`) problems.push(`expected role agent-
 
 if (problems.length) fail(problems.join('\n'));
 console.log(`\nblast radius OK: ${env} reaches only ${env} secrets`);
+
+// Don't follow redirects: Deployment Protection answers a rejected caller with a
+// redirect to the Vercel login page, and we want to report that, not parse it.
+async function getJson(path) {
+  const res = await fetch(`${base}${path}`, { redirect: 'manual' });
+  const type = res.headers.get('content-type') ?? '';
+  if (res.ok && type.includes('application/json')) return res.json();
+  const hints = ['location', 'x-vercel-error', 'x-vercel-id', 'x-vercel-protection-bypass', 'www-authenticate']
+    .map((h) => [h, res.headers.get(h)])
+    .filter(([, v]) => v)
+    .map(([h, v]) => `  ${h}: ${h === 'location' ? v.split('?')[0] : v}`);
+  fail(`GET ${path} returned ${res.status} (${type || 'no content-type'})\n${hints.join('\n')}`);
+}
 
 function deploymentUrl() {
   // Set by Vercel CI for tasks that depend on <package>#deployment.
