@@ -1,5 +1,5 @@
 {
-  "name": "@blast-radius/vault-policy",
+  "name": "@pgd-vercel-ci/vault-policy",
   "version": "0.0.0",
   "private": true,
   "type": "module",

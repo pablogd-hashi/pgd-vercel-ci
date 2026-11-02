@@ -1,4 +1,4 @@
-import { getWorkloadIdentity, probeBlastRadius } from '@blast-radius/agent-core';
+import { getWorkloadIdentity, probeBlastRadius } from '@pgd-vercel-ci/agent-core';
 
 export async function GET() {
   try {

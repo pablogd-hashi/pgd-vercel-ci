@@ -1,6 +1,6 @@
 'use client';
 
-import type { Probe } from '@blast-radius/agent-core';
+import type { Probe } from '@pgd-vercel-ci/agent-core';
 
 const SIZE = 440;
 const C = SIZE / 2;

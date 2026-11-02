@@ -20,12 +20,12 @@ importers:
       '@ai-sdk/otel':
         specifier: ^1.0.159
         version: 1.0.159(zod@4.6.7)
-      '@blast-radius/agent-core':
-        specifier: workspace:*
-        version: link:../../packages/agent-core
       '@opentelemetry/api':
         specifier: ^1.10.0
         version: 1.10.0
+      '@pgd-vercel-ci/agent-core':
+        specifier: workspace:*
+        version: link:../../packages/agent-core
       '@vercel/otel':
         specifier: ^2.2.0
         version: 2.2.0(@opentelemetry/api-logs@0.223.0)(@opentelemetry/api@1.10.0)(@opentelemetry/instrumentation@0.223.0(@opentelemetry/api@1.10.0))(@opentelemetry/resources@2.12.0(@opentelemetry/api@1.10.0))(@opentelemetry/sdk-logs@0.223.0(@opentelemetry/api@1.10.0))(@opentelemetry/sdk-metrics@2.12.0(@opentelemetry/api@1.10.0))(@opentelemetry/sdk-trace-base@2.12.0(@opentelemetry/api@1.10.0))
@@ -81,9 +81,6 @@ importers:
       '@ai-sdk/otel':
         specifier: ^1.0.159
         version: 1.0.159(zod@4.6.7)
-      '@blast-radius/agent-core':
-        specifier: workspace:*
-        version: link:../agent-core
       '@opentelemetry/api':
         specifier: ^1.10.0
         version: 1.10.0
@@ -93,11 +90,14 @@ importers:
       '@opentelemetry/sdk-trace-node':
         specifier: ^2.12.0
         version: 2.12.0(@opentelemetry/api@1.10.0)
+      '@pgd-vercel-ci/agent-core':
+        specifier: workspace:*
+        version: link:../agent-core
       ai:
         specifier: ^7.0.159
         version: 7.0.159(zod@4.6.7)
     devDependencies:
-      '@blast-radius/vault-policy':
+      '@pgd-vercel-ci/vault-policy':
         specifier: workspace:*
         version: link:../../infra/vault
       '@types/node':

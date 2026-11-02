@@ -20,9 +20,9 @@ start_vault() {
   (cd "$work/tf" && rm -rf .terraform* terraform.tfstate* \
     && terraform init -input=false >/dev/null \
     && terraform apply -auto-approve -input=false \
-      -var vercel_team_slug=acme -var vercel_project=blast-radius \
+      -var vercel_team_slug=acme -var vercel_project=pgd-vercel-ci \
       -var "jwt_validation_pubkeys=[$(jq -Rs . <"$work/pub.pem")]" >/dev/null)
   echo "✔ local Vault configured from infra/vault"
 }
 
-mint() { node "$here/mint-token.mjs" "$work/key.pem" acme blast-radius "$1"; }
+mint() { node "$here/mint-token.mjs" "$work/key.pem" acme pgd-vercel-ci "$1"; }

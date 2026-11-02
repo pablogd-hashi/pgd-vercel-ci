@@ -1,5 +1,5 @@
 import { trace } from '@opentelemetry/api';
-import { createOpsAgent, getWorkloadIdentity, MAX_STEPS, type AuditEntry } from '@blast-radius/agent-core';
+import { createOpsAgent, getWorkloadIdentity, MAX_STEPS, type AuditEntry } from '@pgd-vercel-ci/agent-core';
 import type { AgentEvent, VaultVerdict } from '@/lib/events';
 
 const CANARY = /CANARY_PROD_[0-9a-f]+/g;

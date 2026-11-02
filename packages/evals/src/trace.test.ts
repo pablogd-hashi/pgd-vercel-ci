@@ -1,5 +1,5 @@
 import { OpenTelemetry } from '@ai-sdk/otel';
-import { MAX_STEPS } from '@blast-radius/agent-core';
+import { MAX_STEPS } from '@pgd-vercel-ci/agent-core';
 import { context, SpanStatusCode, trace } from '@opentelemetry/api';
 import { InMemorySpanExporter, SimpleSpanProcessor, type ReadableSpan } from '@opentelemetry/sdk-trace-base';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';

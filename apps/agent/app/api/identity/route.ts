@@ -1,4 +1,4 @@
-import { DEFAULT_MODEL, getWorkloadIdentity, vaultLogin } from '@blast-radius/agent-core';
+import { DEFAULT_MODEL, getWorkloadIdentity, vaultLogin } from '@pgd-vercel-ci/agent-core';
 import type { IdentityView } from '@/lib/events';
 
 export async function GET() {

@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const config: NextConfig = {
-  transpilePackages: ['@blast-radius/agent-core'],
+  transpilePackages: ['@pgd-vercel-ci/agent-core'],
 };
 
 export default config;

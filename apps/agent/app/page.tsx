@@ -1,6 +1,6 @@
 'use client';
 
-import type { Probe } from '@blast-radius/agent-core';
+import type { Probe } from '@pgd-vercel-ci/agent-core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AgentEvent, IdentityView } from '@/lib/events';
 import { normalisePath, RadiusMap, type Hit } from './components/RadiusMap';
@@ -115,7 +115,7 @@ export default function Page() {
             <circle cx="17" cy="17" r="3.5" fill="currentColor" />
           </svg>
           <div>
-            <h1>Blast Radius</h1>
+            <h1>Vercel CI with Vault and Terraform</h1>
             <p>An agent with no secrets. Its reach is whatever this deployment&apos;s identity can get from Vault.</p>
           </div>
         </div>

@@ -3,7 +3,7 @@ import {
   getWorkloadIdentity,
   type AuditEntry,
   type WorkloadIdentity,
-} from '@blast-radius/agent-core';
+} from '@pgd-vercel-ci/agent-core';
 
 export const CANARY = /CANARY_PROD_[0-9a-f]+/;
 

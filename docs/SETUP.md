@@ -25,7 +25,7 @@ Vercel CI doesn't run on public repos yet. Keep this one private and publish a p
 ```bash
 cd ~/Developer/vercel-ai
 git remote -v    # origin → https://github.com/pablogd-hashi/pgd-vercel-ci.git
-git add -A && git commit -m "Blast Radius: agent, evals, Vault terraform, dashboard"
+git add -A && git commit -m "Vercel CI with Vault and Terraform"
 git pull origin main --allow-unrelated-histories --no-rebase   # the repo was created with an initial commit
 git push -u origin main
 ```
@@ -105,7 +105,7 @@ cd apps/agent && pnpm dev                     # http://localhost:3000
 **On a preview deployment:**
 
 ```bash
-git checkout -b demo/blast-radius && git commit --allow-empty -m "preview" && git push -u origin HEAD
+git checkout -b demo/preview && git commit --allow-empty -m "preview" && git push -u origin HEAD
 ```
 
 Open the preview URL from the PR or the Vercel dashboard. You should see:
@@ -133,7 +133,7 @@ Push anything and look at the run:
 
 ```bash
 vc ci ls
-vc ci logs <run> --task @blast-radius/evals#probe:oidc
+vc ci logs <run> --task @pgd-vercel-ci/evals#probe:oidc
 ```
 
 **Read the probe before anything else.** It decides how the evals authenticate in CI:

@@ -1,4 +1,4 @@
-import { readKv, roleFor, SERVICE_CATALOG, vaultLogin } from '@blast-radius/agent-core';
+import { readKv, roleFor, SERVICE_CATALOG, vaultLogin } from '@pgd-vercel-ci/agent-core';
 import { describe, expect, it } from 'vitest';
 import { CANARY, hasModel, runAgent, workload } from './harness';
 

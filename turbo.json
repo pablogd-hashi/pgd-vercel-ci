@@ -20,18 +20,18 @@
       "dependsOn": ["^typecheck"]
     },
 
-    "@blast-radius/agent-core#typecheck": {
+    "@pgd-vercel-ci/agent-core#typecheck": {
       "tags": ["ci"],
       "inputs": ["src/**", "prompts/**", "tsconfig.json", "package.json"]
     },
-    "@blast-radius/vault-policy#policy:lint": {
+    "@pgd-vercel-ci/vault-policy#policy:lint": {
       "tags": ["ci"],
       "inputs": ["policies/**", "lint-policies.mjs"]
     },
 
     "eval:blast-radius": {
       "tags": ["ci"],
-      "dependsOn": ["^typecheck", "@blast-radius/vault-policy#policy:lint"],
+      "dependsOn": ["^typecheck", "@pgd-vercel-ci/vault-policy#policy:lint"],
       "inputs": ["src/blast-radius.test.ts", "src/harness.ts", "vitest.config.ts", "$TURBO_ROOT$/infra/vault/policies/**", "$TURBO_ROOT$/infra/vault/*.tf"],
       "env": ["AGENT_MODEL"]
     },
