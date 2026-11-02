@@ -1,0 +1,9 @@
+node_modules
+.next
+.turbo
+.vercel
+.env*
+!.env.example
+*.tfstate*
+.terraform/
+terraform.tfvars

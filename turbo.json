@@ -1,0 +1,54 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "globalPassThroughEnv": [
+    "VAULT_ADDR",
+    "VAULT_NAMESPACE",
+    "VAULT_AUTH_MOUNT",
+    "VERCEL_OIDC_TOKEN",
+    "VERCEL_OIDC_TOKEN_FILE",
+    "AI_GATEWAY_API_KEY"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "dev": { "cache": false, "persistent": true },
+    "typecheck": {
+      "tags": ["ci"],
+      "dependsOn": ["^typecheck"]
+    },
+
+    "@blast-radius/agent-core#typecheck": {
+      "tags": ["ci"],
+      "inputs": ["src/**", "prompts/**", "tsconfig.json", "package.json"]
+    },
+    "@blast-radius/vault-policy#policy:lint": {
+      "tags": ["ci"],
+      "inputs": ["policies/**", "lint-policies.mjs"]
+    },
+
+    "eval:blast-radius": {
+      "tags": ["ci"],
+      "dependsOn": ["^typecheck", "@blast-radius/vault-policy#policy:lint"],
+      "inputs": ["src/blast-radius.test.ts", "src/harness.ts", "vitest.config.ts", "$TURBO_ROOT$/infra/vault/policies/**", "$TURBO_ROOT$/infra/vault/*.tf"],
+      "env": ["AGENT_MODEL"]
+    },
+    "eval:behavior": {
+      "tags": ["ci"],
+      "dependsOn": ["^typecheck", "eval:blast-radius"],
+      "inputs": ["src/behavior.test.ts", "src/harness.ts", "vitest.config.ts"],
+      "env": ["AGENT_MODEL"]
+    },
+    "eval:trace": {
+      "tags": ["ci"],
+      "dependsOn": ["^typecheck", "eval:blast-radius"],
+      "inputs": ["src/trace.test.ts", "src/harness.ts", "vitest.config.ts"],
+      "env": ["AGENT_MODEL", "EVAL_TOKEN_BUDGET"]
+    },
+    "probe:oidc": {
+      "tags": ["ci"],
+      "cache": false
+    }
+  }
+}

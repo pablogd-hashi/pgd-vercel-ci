@@ -1,0 +1,27 @@
+{
+  "name": "@blast-radius/evals",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "eval:blast-radius": "vitest run src/blast-radius.test.ts",
+    "eval:behavior": "vitest run src/behavior.test.ts",
+    "eval:trace": "vitest run src/trace.test.ts",
+    "typecheck": "tsc --noEmit",
+    "probe:oidc": "node src/probe-oidc.mjs"
+  },
+  "dependencies": {
+    "@ai-sdk/otel": "^1.0.159",
+    "@blast-radius/agent-core": "workspace:*",
+    "@opentelemetry/api": "^1.10.0",
+    "@opentelemetry/sdk-trace-base": "^2.12.0",
+    "@opentelemetry/sdk-trace-node": "^2.12.0",
+    "ai": "^7.0.159"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5",
+    "@blast-radius/vault-policy": "workspace:*"
+  }
+}
