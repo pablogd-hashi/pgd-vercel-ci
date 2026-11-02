@@ -61,12 +61,12 @@ resource "vault_jwt_auth_backend_role" "agent_production" {
 
 resource "vault_policy" "agent_preview" {
   name   = "agent-preview"
-  policy = file("${path.module}/policies/agent-preview.hcl")
+  policy = templatefile("${path.module}/policies/agent-preview.hcl", { kv_mount = var.kv_mount })
 }
 
 resource "vault_policy" "agent_production" {
   name   = "agent-production"
-  policy = file("${path.module}/policies/agent-production.hcl")
+  policy = templatefile("${path.module}/policies/agent-production.hcl", { kv_mount = var.kv_mount })
 }
 
 # --- Demo secrets ------------------------------------------------------------

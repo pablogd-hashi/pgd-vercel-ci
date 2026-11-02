@@ -1,4 +1,4 @@
 # Preview agents can read preview secrets. Nothing else.
-path "secret/data/preview/*" {
+path "${kv_mount}/data/preview/*" {
   capabilities = ["read"]
 }

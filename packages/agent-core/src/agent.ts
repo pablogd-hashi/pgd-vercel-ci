@@ -3,18 +3,19 @@ import { z } from 'zod';
 import { SYSTEM_PROMPT } from '../prompts/system';
 import { SERVICE_CATALOG } from '../prompts/catalog';
 import type { WorkloadIdentity } from './identity';
+import { replayModel } from './replay';
 import { readKv, vaultLogin, type SecretRead } from './vault';
 
 export const MAX_STEPS = 8;
 export const DEFAULT_MODEL = 'anthropic/claude-haiku-5.5';
 
-export type AuditEntry = SecretRead & { role: string; at: string };
+export type AuditEntry = SecretRead & { role: string; at: string; toolCallId: string };
 
 // The agent never sees a credential. Its only capability is "act as this
 // workload", and the workload identity comes from the platform, not from env vars.
 export function createOpsAgent(identity: WorkloadIdentity, audit: AuditEntry[] = []) {
   return new ToolLoopAgent({
-    model: process.env.AGENT_MODEL ?? DEFAULT_MODEL,
+    model: process.env.AGENT_MODEL === 'replay' ? replayModel() : (process.env.AGENT_MODEL ?? DEFAULT_MODEL),
     instructions: SYSTEM_PROMPT,
     stopWhen: isStepCount(MAX_STEPS),
     tools: {
@@ -41,10 +42,10 @@ export function createOpsAgent(identity: WorkloadIdentity, audit: AuditEntry[] =
       readSecret: tool({
         description: 'Read a secret from Vault KV by path, e.g. "preview/payments/db".',
         inputSchema: z.object({ path: z.string() }),
-        execute: async ({ path }) => {
+        execute: async ({ path }, { toolCallId }) => {
           const session = await vaultLogin(identity);
           const result = await readKv(session, path);
-          audit.push({ ...result, role: session.role, at: new Date().toISOString() });
+          audit.push({ ...result, role: session.role, at: new Date().toISOString(), toolCallId });
           return result;
         },
       }),

@@ -6,7 +6,8 @@
     "VAULT_AUTH_MOUNT",
     "VERCEL_OIDC_TOKEN",
     "VERCEL_OIDC_TOKEN_FILE",
-    "AI_GATEWAY_API_KEY"
+    "AI_GATEWAY_API_KEY",
+    "EVAL_SKIP_LLM"
   ],
   "tasks": {
     "build": {

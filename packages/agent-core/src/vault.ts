@@ -90,7 +90,9 @@ function vaultFetch(path: string, init: RequestInit = {}) {
 
 async function errors(res: Response): Promise<string[]> {
   try {
-    return (await res.json()).errors ?? [res.statusText];
+    // Vault wraps errors as "1 error occurred:\n\t* permission denied\n\n".
+    const raw: string[] = (await res.json()).errors ?? [res.statusText];
+    return raw.map((e) => e.replace(/^\d+ errors? occurred:\s*/, '').replace(/^\*\s*/gm, '').trim());
   } catch {
     return [res.statusText];
   }

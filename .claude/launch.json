@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard-local",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["infra/local/dev-local.sh", "preview"],
+      "port": 3000
+    }
+  ]
+}

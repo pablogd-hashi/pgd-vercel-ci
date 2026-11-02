@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/provider": "^4.0.35",
     "@vercel/oidc": "^4.0.5",
     "ai": "^7.0.159",
     "zod": "^4.6.7"
