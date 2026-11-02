@@ -3,6 +3,7 @@
 // CI the request to our own deployment carries a Vercel CI OIDC token in the
 // x-vercel-trusted-oidc-idp-token header (tag ci:oidc:deployments), and the
 // deployment logs in to Vault with its own OIDC token.
+// See https://vercel.com/docs/ci/configuration (Testing against your deployments).
 //
 // Locally: node scripts/verify-radius.mjs https://pgd-vercel-ci.vercel.app
 const PKG = '@pgd-vercel-ci/agent';
