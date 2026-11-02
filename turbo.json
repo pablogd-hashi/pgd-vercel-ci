@@ -51,7 +51,7 @@
       "tags": ["ci", "ci:oidc:deployments"],
       "dependsOn": ["@pgd-vercel-ci/agent#deployment"],
       "cache": false,
-      "passThroughEnv": ["VERCEL_DEPLOYMENT_URLS", "VERCEL_DEPLOYMENT_TARGETS"]
+      "passThroughEnv": ["VERCEL_DEPLOYMENT_URLS", "VERCEL_DEPLOYMENT_TARGETS", "SSL_CERT_FILE", "NODE_EXTRA_CA_CERTS", "NODE_USE_SYSTEM_CA"]
     },
     "probe:oidc": {
       "cache": false,

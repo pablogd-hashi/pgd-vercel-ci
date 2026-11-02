@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "verify:radius": "node scripts/verify-radius.mjs"
+    "verify:radius": "sh scripts/verify-radius.sh"
   },
   "devDependencies": {
     "@pgd-vercel-ci/vault-policy": "workspace:*",
