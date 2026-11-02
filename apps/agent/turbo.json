@@ -1,0 +1,11 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "verify:radius": {
+      "dependsOn": ["@pgd-vercel-ci/agent#deployment"],
+      "tags": ["ci", "ci:oidc:deployments"],
+      "cache": false,
+      "passThroughEnv": ["VERCEL_DEPLOYMENT_URLS", "VERCEL_DEPLOYMENT_TARGETS", "SSL_CERT_FILE", "NODE_EXTRA_CA_CERTS"]
+    }
+  }
+}

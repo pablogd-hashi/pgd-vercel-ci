@@ -44,15 +44,6 @@
       "inputs": ["src/trace.test.ts", "src/harness.ts", "vitest.config.ts"],
       "env": ["AGENT_MODEL", "EVAL_TOKEN_BUDGET"]
     },
-    "@pgd-vercel-ci/agent#deployment": {
-      "cache": false
-    },
-    "@pgd-vercel-ci/agent#verify:radius": {
-      "tags": ["ci", "ci:oidc:deployments"],
-      "dependsOn": ["@pgd-vercel-ci/agent#deployment"],
-      "cache": false,
-      "passThroughEnv": ["VERCEL_DEPLOYMENT_URLS", "VERCEL_DEPLOYMENT_TARGETS", "SSL_CERT_FILE", "NODE_EXTRA_CA_CERTS", "NODE_USE_SYSTEM_CA", "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "http_proxy", "https_proxy", "no_proxy"]
-    },
     "probe:oidc": {
       "cache": false,
       "passThroughEnv": ["VERCEL_*", "CI"]
