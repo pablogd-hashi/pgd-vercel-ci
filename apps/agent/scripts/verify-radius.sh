@@ -15,4 +15,10 @@ fi
 # Names only, never values: what networking setup does this job have?
 env | cut -d= -f1 | grep -iE '^(https?_proxy|no_proxy|ssl_cert_file|node_extra_ca_certs|node_use_system_ca|node_use_env_proxy)$' \
   | sort | tr '\n' ' ' | sed 's/^/network env: /; s/$/\n/' || true
+# Diagnostic: the same request through curl, which Vercel's own examples use.
+# If curl gets through and Node doesn't, the problem is Node-specific.
+if [ -n "${VERCEL_DEPLOYMENT_URLS:-}" ] && command -v curl >/dev/null; then
+  host=$(node -p 'JSON.parse(process.env.VERCEL_DEPLOYMENT_URLS)["@pgd-vercel-ci/agent"]')
+  echo "curl check: $(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "https://$host/api/identity" | cut -d'?' -f1)"
+fi
 exec node "$(dirname "$0")/verify-radius.mjs" "$@"
