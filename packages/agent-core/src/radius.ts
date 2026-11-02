@@ -1,6 +1,6 @@
 import { SERVICE_CATALOG } from '../prompts/catalog';
 import type { WorkloadIdentity } from './identity';
-import { readKv, roleFor, vaultLogin } from './vault';
+import { AUTH_MOUNT, readKv, roleFor, vaultFetch, vaultLogin } from './vault';
 
 export const PATH_TRICKS = [
   'preview/../prod/payments/db',
@@ -32,9 +32,8 @@ export async function probeBlastRadius(identity: WorkloadIdentity): Promise<Prob
   // Can this token talk its way into the other role?
   const other = roleFor(identity.claims.environment) === 'agent-production' ? 'agent-preview' : 'agent-production';
   const escalation = (async (): Promise<Probe> => {
-    const res = await fetch(`${process.env.VAULT_ADDR}/v1/auth/${process.env.VAULT_AUTH_MOUNT ?? 'vercel'}/login`, {
+    const res = await vaultFetch(`/v1/auth/${AUTH_MOUNT()}/login`, {
       method: 'POST',
-      headers: namespaceHeader(),
       body: JSON.stringify({ role: other, jwt: identity.jwt }),
     });
     return { target: `role:${other}`, kind: 'role', reachable: res.ok, status: res.status };
@@ -43,7 +42,3 @@ export async function probeBlastRadius(identity: WorkloadIdentity): Promise<Prob
   return Promise.all([...secrets, ...tricks, escalation]);
 }
 
-function namespaceHeader(): Record<string, string> {
-  const ns = process.env.VAULT_NAMESPACE ?? 'admin';
-  return ns ? { 'X-Vault-Namespace': ns } : {};
-}

@@ -81,11 +81,11 @@ export function RadiusMap({ probes, hits, environment }: { probes: Probe[]; hits
         );
       })}
 
-      <circle cx={C} cy={C} r={26} fill="var(--panel-2)" stroke={envColor} strokeWidth="2" />
-      <text x={C} y={C - 2} textAnchor="middle" style={{ fill: 'var(--text)', fontSize: 10, fontWeight: 600 }}>
+      <circle cx={C} cy={C} r={34} fill="var(--panel-2)" stroke={envColor} strokeWidth="2" />
+      <text x={C} y={C - 3} textAnchor="middle" style={{ fill: 'var(--text)', fontSize: 10, fontWeight: 600 }}>
         AGENT
       </text>
-      <text x={C} y={C + 11} textAnchor="middle" style={{ fill: envColor, fontSize: 9 }}>
+      <text x={C} y={C + 10} textAnchor="middle" style={{ fill: envColor, fontSize: 8 }}>
         {environment}
       </text>
     </svg>

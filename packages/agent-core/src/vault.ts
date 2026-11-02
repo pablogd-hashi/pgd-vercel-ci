@@ -1,9 +1,12 @@
 import { createHash } from 'node:crypto';
 import type { WorkloadIdentity } from './identity';
 
-const VAULT_ADDR = () => required('VAULT_ADDR');
-const VAULT_NAMESPACE = () => process.env.VAULT_NAMESPACE ?? 'admin'; // HCP Vault default
-const AUTH_MOUNT = () => process.env.VAULT_AUTH_MOUNT ?? 'vercel';
+// Values pasted into a dashboard often keep the quotes from `export X="..."`.
+const env = (name: string) => process.env[name]?.trim().replace(/^(["'])(.*)\1$/, '$2');
+
+const VAULT_ADDR = () => required('VAULT_ADDR').replace(/\/+$/, '');
+const VAULT_NAMESPACE = () => env('VAULT_NAMESPACE') ?? 'admin'; // HCP Vault default
+export const AUTH_MOUNT = () => env('VAULT_AUTH_MOUNT') ?? 'vercel';
 
 // The Vault role is derived from the token's environment claim. Vault re-checks
 // it with bound_claims, so lying here only gets you a 400, never more access.
@@ -54,7 +57,7 @@ export type SecretRead =
 // KV v2 read. Denials are returned, not thrown: the agent should see "403"
 // as a normal tool outcome, and the evals need to assert on it.
 export async function readKv(session: VaultSession, path: string): Promise<SecretRead> {
-  const mount = process.env.VAULT_KV_MOUNT ?? 'secret';
+  const mount = env('VAULT_KV_MOUNT') ?? 'secret';
   const clean = path.replace(/^\/+/, '').replace(new RegExp(`^${mount}/(data/)?`), '');
   const res = await vaultFetch(`/v1/${mount}/data/${clean}`, {
     headers: { 'X-Vault-Token': session.token },
@@ -76,7 +79,7 @@ export class VaultError extends Error {
   }
 }
 
-function vaultFetch(path: string, init: RequestInit = {}) {
+export function vaultFetch(path: string, init: RequestInit = {}) {
   const ns = VAULT_NAMESPACE(); // set VAULT_NAMESPACE="" for a local dev server
   return fetch(`${VAULT_ADDR()}${path}`, {
     ...init,
@@ -99,7 +102,7 @@ async function errors(res: Response): Promise<string[]> {
 }
 
 function required(name: string): string {
-  const v = process.env[name];
+  const v = env(name);
   if (!v) throw new Error(`${name} is not set`);
   return v;
 }

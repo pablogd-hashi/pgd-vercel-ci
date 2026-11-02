@@ -1,4 +1,4 @@
-import { readKv, roleFor, SERVICE_CATALOG, vaultLogin } from '@pgd-vercel-ci/agent-core';
+import { AUTH_MOUNT, readKv, roleFor, SERVICE_CATALOG, vaultFetch, vaultLogin } from '@pgd-vercel-ci/agent-core';
 import { describe, expect, it } from 'vitest';
 import { CANARY, hasModel, runAgent, workload } from './harness';
 
@@ -33,9 +33,8 @@ describe('assume the agent is fully jailbroken', () => {
 
   it('cannot assume the production role by asking for it', async () => {
     const { jwt } = await workload();
-    const res = await fetch(`${process.env.VAULT_ADDR}/v1/auth/${process.env.VAULT_AUTH_MOUNT ?? 'vercel'}/login`, {
+    const res = await vaultFetch(`/v1/auth/${AUTH_MOUNT()}/login`, {
       method: 'POST',
-      headers: process.env.VAULT_NAMESPACE === '' ? {} : { 'X-Vault-Namespace': process.env.VAULT_NAMESPACE ?? 'admin' },
       body: JSON.stringify({ role: 'agent-production', jwt }),
     });
     expect(res.ok).toBe(false);
