@@ -1,6 +1,10 @@
 # Setup: GitHub → HCP Vault (Terraform) → Vercel
 
-About 30 minutes. Decide two names up front, because Vault binds to them:
+About 30 minutes. This is what you're building: Vercel signs a token for each deployment, and Vault turns it into a role based on the `environment` claim.
+
+![The signed environment claim decides what Vault hands back](diagrams/identity-flow.svg)
+
+Decide two names up front, because Vault binds to them:
 
 | Name | Example | Where it shows up |
 | --- | --- | --- |
@@ -111,6 +115,10 @@ vercel deploy                                  # from the repo root
 vercel curl <preview-url>/api/radius           # vercel curl gets you past Deployment Protection
 ```
 
+`vercel curl` and the agent use different badges: your login opens Vercel's door, the deployment's own token opens Vault's.
+
+![Two badges, two doors: Vercel lets the caller in, Vault decides what opens](diagrams/two-doors.svg)
+
 A git push works too, but Vercel skips the deployment if the commit doesn't change anything under `apps/agent` or its workspace dependencies (an empty commit is cancelled).
 
 You should see the role `agent-preview`, preview secrets ALLOW 200, prod secrets and path tricks DENY 403, and `role:agent-production` DENY 400.
@@ -122,6 +130,7 @@ You should see the role `agent-preview`, preview secrets ALLOW 200, prod secrets
 | Symptom | Fix |
 | --- | --- |
 | Deployment **Blocked**: "commit author doesn't have permission" | The commit email isn't on the GitHub account linked to your Vercel login. See step 1 |
+| `vercel deploy` fails with "File size limit exceeded (100 MB)" | The CLI uploads the working directory, not the git tree. `.vercelignore` keeps Terraform state, providers and build caches out |
 | Deployment **Canceled**: "commit didn't affect this project" | The commit changed nothing under `apps/agent` or its dependencies |
 | `Failed to parse URL from "https://…` | `VAULT_ADDR` was saved with quotes. Edit it in Vercel, or redeploy (the code strips them) |
 | Identity panel shows `VAULT_ADDR is not set` | The env var wasn't added for that environment; redeploy after adding it |

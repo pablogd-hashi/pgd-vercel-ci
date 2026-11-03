@@ -1,0 +1,17 @@
+# The Vercel CLI uploads the working directory, not the git tree, so anything
+# local-only must be listed here as well as in .gitignore.
+
+# Terraform: state holds the demo secret values, providers are 100 MB+
+**/.terraform
+**/*.tfstate
+**/*.tfstate.*
+**/terraform.tfvars
+
+# Local env files and links
+**/.env*
+.vercel
+
+# Build and tool caches
+**/.next
+**/.turbo
+.claude

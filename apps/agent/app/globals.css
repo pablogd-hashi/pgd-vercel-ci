@@ -55,8 +55,6 @@ button { font: inherit; color: inherit; }
 .logo { width: 34px; height: 34px; }
 .brand h1 { font-size: 20px; letter-spacing: -0.02em; margin: 0; }
 .brand p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
-.series { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
-.series b { color: var(--text); font-weight: 600; }
 
 .env {
   display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em;

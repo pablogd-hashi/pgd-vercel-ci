@@ -115,16 +115,11 @@ export default function Page() {
             <circle cx="17" cy="17" r="3.5" fill="currentColor" />
           </svg>
           <div>
-            <h1>Assume Your AI Agent Is Compromised</h1>
-            <p>An agent with no secrets. Its reach is whatever this deployment&apos;s identity can get from Vault.</p>
+            <h1>Agent Identity on Vercel with Vault</h1>
+            <p>Identity &amp; Trust for AI Workloads</p>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-          <span className="series">
-            Identity &amp; Trust for AI Workloads · <b>Part 3</b>
-          </span>
-          {identity && <span className={`env ${env}`}>{env}</span>}
-        </div>
+        {identity && <span className={`env ${env}`}>{env}</span>}
       </header>
 
       <div className="grid">

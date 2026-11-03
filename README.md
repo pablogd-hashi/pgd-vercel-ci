@@ -1,12 +1,12 @@
-# Assume Your AI Agent Is Compromised
+# Agent Identity on Vercel with Vault
 
-### Terraform, Vault and Vercel
+### Identity and Trust for AI Workloads, Part 3
 
 This repo goes with the third post in my *Identity and Trust for AI Workloads* series. In the [first one](https://medium.com/@pablogd/identity-and-trust-for-ai-workloads-b67b1a137ed6) I gave each agent a SPIFFE identity with Vault PKI and Consul. In the [second one](https://medium.com/@pablogd/ai-observability-tracing-smolagents-with-spiffe-and-otel-96d463a8c6ae) I traced what those agents were actually doing with OpenTelemetry. This one asks a different question: if someone manages to trick my agent, how far can it actually go?
 
 ## The idea
 
-When I talk to customers about agents, the security conversation usually ends up in the system prompt: "we told the model not to do X". That's fine, but a prompt is a suggestion, not a security control. So for this repo I flipped the assumption. The agent is deliberately naive (its `readSecret` tool accepts any path, no allowlist), and I assume the model has already lost the fight against a prompt injection.
+When I talk to customers about agents, the security conversation usually ends up in the system prompt: "we told the model not to do X". That's fine, but a system prompt is a sign on the door, not a lock on it. So for this repo I flipped the assumption. The agent is deliberately naive (its `readSecret` tool accepts any path, no allowlist), and I assume the model has already lost the fight against a prompt injection.
 
 What protects production is identity, not the prompt:
 
@@ -14,7 +14,13 @@ What protects production is identity, not the prompt:
 2. The agent's tools exchange that token with Vault (JWT auth). Vault verifies the signature, checks the claims and hands back a short-lived token.
 3. A preview deployment can only get the `agent-preview` role, which can only read `preview/*` secrets. Only a production deployment can get `agent-production`.
 
+![The signed environment claim decides what Vault hands back](docs/diagrams/identity-flow.svg)
+
 There are no Vault tokens or API keys in environment variables. In my previous posts the identity came from the service mesh (an Envoy sidecar with an SVID). On Vercel there is no sidecar, so the platform itself vouches for the workload.
+
+Checking a protected preview involves two separate badges. Your Vercel login (through `vercel curl`) only gets you past Vercel's Deployment Protection. The agent then uses its own OIDC token with Vault, which makes the actual authorization decision:
+
+![Two badges, two doors: Vercel lets the caller in, Vault decides what opens](docs/diagrams/two-doors.svg)
 
 To be clear about the scope: this doesn't solve prompt injection, and it doesn't stop a production agent from leaking production secrets it is allowed to read. It shows that a tricked preview agent can't reach production.
 
